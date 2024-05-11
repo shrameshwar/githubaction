@@ -1,0 +1,22 @@
+name: testing
+on:
+  push:
+    branches: 
+       master
+env:
+  REPO_NAME:  mayank
+  ENV: dev
+  APP_NAME: testapp
+  IMAGE_NAME: testingnew
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check the master branch
+      uses: actions/checkout@v3
+      with:
+         ref:
+          master
+
+  
