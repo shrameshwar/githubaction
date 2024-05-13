@@ -1,10 +1,12 @@
 name: testing
+
 on:
   push:
-    branches: 
-       master
+    branches:
+      - master
+
 env:
-  REPO_NAME:  shram
+  REPO_NAME: shram
   ENV: dev
   APP_NAME: testapp
   IMAGE_NAME: beast
@@ -13,51 +15,53 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     steps:
-    - name: Check the master branch
-      uses: actions/checkout@v3
-      with:
-         ref:
-          master
-    -
-        name: Set up QEMU
+      - name: Check out the master branch
+        uses: actions/checkout@v3
+        with:
+          ref: master  # Corrected syntax
+
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-    -
-        name: Set up Docker Buildx
+
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-    -
-        name: Login to Docker Hub
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-    -
-        name: Build and push
+
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
   cd:
-   needs: integration
-   runs-on: ubuntu-latest
-   steps:
-   - name: check out deployment repo
-     uses: actions/checkout@v3
-     with: 
-       repository: shrameshwar/kubernetes
-       token: ${{ secrets.GH_TOKEN }}
-   - name: Updating Deployment Image
-     run: |
+    needs: integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out deployment repo
+        uses: actions/checkout@v3
+        with: 
+          repository: shrameshwar/kubernetes
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Updating Deployment Image
+        run: |
           IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest"
           echo $IMAGE_NAME
           sed -i "s|shrame1999/testingnew.*$|$IMAGE_NAME|" deployment.yml
-   -
-        name: Push To Repository
+
+      - name: Push To Repository
         run: |
           git config --global user.email "shrameshwar1999@gmail.com"
           git config --global user.name "Runner"
           git add .
-          git commit -m "${IMAGE_NAME} Tag"
+          git commit -m "${{ env.IMAGE_NAME }} Tag"  # Changed to use env.IMAGE_NAME
           git push
+
 
         
 
