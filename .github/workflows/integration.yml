@@ -38,29 +38,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
-  cd:
-    needs: integration
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out deployment repo
-        uses: actions/checkout@v3
-        with: 
-          repository: shrameshwar/kubernetes
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Updating Deployment Image
-        run: |
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest"
-          echo $IMAGE_NAME
-          sed -i "s|shrame1999/testingnew.*$|$IMAGE_NAME|" deployment.yml
-
-      - name: Push To Repository
-        run: |
-          git config --global user.email "shrameshwar1999@gmail.com"
-          git config --global user.name "Runner"
-          git add .
-          git commit -m "${{ env.IMAGE_NAME }} Tag"  # Changed to use env.IMAGE_NAME
-          git push
+  
 
 
         
