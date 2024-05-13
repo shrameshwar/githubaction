@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest2
   cd:
    needs: integration
    runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
        token: ${{ secrets.GH_TOKEN }}
    - name: Updating Deployment Image
      run: |
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:v1"
+          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest2"
           echo $IMAGE_NAME
           sed -i "s|shrame1999/testingnew.*$|$IMAGE_NAME|" deployment.yml
    -
