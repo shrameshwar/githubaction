@@ -4,10 +4,10 @@ on:
     branches: 
        master
 env:
-  REPO_NAME:  mayank
+  REPO_NAME:  shram
   ENV: dev
   APP_NAME: testapp
-  IMAGE_NAME: helloworld
+  IMAGE_NAME: solotest
 
 jobs:
   integration:
