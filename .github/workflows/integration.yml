@@ -7,7 +7,7 @@ env:
   REPO_NAME:  shram
   ENV: dev
   APP_NAME: testapp
-  IMAGE_NAME: solobest
+  IMAGE_NAME: beast
 
 jobs:
   integration:
